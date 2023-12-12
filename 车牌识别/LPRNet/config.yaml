@@ -1,0 +1,62 @@
+dataset:
+  train_dataset_dir: D:\Users\Desktop\train
+  val_dataset_dir: ""
+  test_dataset_dir: ""
+  val_split: 0.1
+
+preprocess:
+  input_image_shape: [ 160, 160, 3 ]
+  use_augmentation: True
+  is_training: True
+  use_padding: True
+
+train:
+  batch_size: 32
+  train_epochs: 200
+  learning_rate: 0.005
+  momentum: 0.9
+  dropout_rate: 0.2
+  l1_regularizer: 0.0
+  l2_regularizer: 0.0001
+  label_smoothing: 0.1
+  train_whole_model: True
+  use_warmup: True
+  warmup:
+    #epochs must be less than the first item of learning_rate_schedule, if learning_rate_schedule is set.  epochs: 30
+    epochs: 2
+    start_learning_rate: 0.0005
+  # The int type should be used, but easydict can only use string as key
+  #  learning_rate_schedule:
+  #    "4": 0.01
+  #    "6": 0.005
+  #    "8": 0.0005
+  feature_dim: 512
+  center_loss_cfg:
+    ALPHA: 0.2
+    LAMBDA: 0.0005
+  arcface_cfg:
+    s: 15
+    m_arc: 0.3
+    m_cos: 0.0
+    loss_w: 0.5
+  # ""/"arcface"/"center_loss", "" means pure softmax
+  margin_loss_type: ""
+  # you can use best model or last model, e.g.: $saved_dir + subdir + [best_model || last_model]
+  pretrained_model: ""
+  hub_model: pytorch/vision:v0.10.0,inception_v3
+
+
+result:
+  save_dir: "./models"
+  torch_model_file_name: ""
+
+
+
+
+
+
+
+
+
+
+
