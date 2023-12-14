@@ -14,30 +14,29 @@ class LocNet(nn.Module):
         super().__init__()
         # 论文LocNet的结构感觉不是很清晰，在复现的时候会出现尺寸问题，对应凑了一下结构，可以在网上找一找其他的复现
         self.with_pool = nn.Sequential(
-            nn.Conv2d(in_ch, out_ch, 3, 2),
+            nn.Conv2d(in_ch, out_ch, 3, 2,bias=False),
             nn.BatchNorm2d(out_ch),
             nn.AvgPool2d(3, 2),
             nn.ReLU(),
-            nn.Conv2d(out_ch, out_ch, 5, 3),
+            nn.Conv2d(out_ch, out_ch, 5, 3,bias=False),
             nn.BatchNorm2d(out_ch),
             nn.ReLU(),
         )
 
         self.without_pool = nn.Sequential(
-            nn.Conv2d(in_ch, out_ch, 5, 3),
+            nn.Conv2d(in_ch, out_ch, 5, 3,bias=False),
             nn.BatchNorm2d(out_ch),
             nn.ReLU(),
-            nn.Conv2d(out_ch, out_ch, 5, 5),
+            nn.Conv2d(out_ch, out_ch, 5, 5,bias=False),
             nn.BatchNorm2d(out_ch),
             nn.ReLU(),
         )
         self.dropout = nn.Dropout(0.5)
         self.loc_linear = nn.Sequential(
-            nn.Linear(out_ch * 2 * 6, out_ch),
+            nn.Linear(out_ch * 2 * 6, out_ch,bias=False),
             nn.BatchNorm1d(out_ch),
             nn.Tanh(),
             nn.Linear(out_ch, 6),
-            nn.BatchNorm1d(6),
             nn.Tanh()
         )
 
@@ -61,16 +60,16 @@ class SmallBlock(nn.Module):
     def __init__(self, in_ch, out_ch):
         super().__init__()
         self.block = nn.Sequential(
-            nn.Conv2d(in_ch, out_ch // 4, 1, 1),
+            nn.Conv2d(in_ch, out_ch // 4, 1, 1,bias=False),
             nn.BatchNorm2d(out_ch // 4),
             nn.ReLU(),
-            nn.Conv2d(out_ch // 4, out_ch // 4, (3, 1), 1, (1, 0)),
+            nn.Conv2d(out_ch // 4, out_ch // 4, (3, 1), 1, (1, 0),bias=False),
             nn.BatchNorm2d(out_ch // 4),
             nn.ReLU(),
-            nn.Conv2d(out_ch // 4, out_ch // 4, (1, 3), 1, (0, 1)),
+            nn.Conv2d(out_ch // 4, out_ch // 4, (1, 3), 1, (0, 1),bias=False),
             nn.BatchNorm2d(out_ch // 4),
             nn.ReLU(),
-            nn.Conv2d(out_ch // 4, out_ch, 1, 1),
+            nn.Conv2d(out_ch // 4, out_ch, 1, 1,bias=False),
             nn.BatchNorm2d(out_ch),
             nn.ReLU()
         )
@@ -85,7 +84,7 @@ class LPRNet(nn.Module):
         super().__init__()
         self.loc_net = LocNet(in_ch, out_ch)
         self.backbone = nn.Sequential(
-            nn.Conv2d(in_ch, out_ch * 2, 1, 1),
+            nn.Conv2d(in_ch, out_ch * 2, 1, 1,bias=False),
             nn.BatchNorm2d(out_ch * 2),
             nn.ReLU(),
             nn.MaxPool2d((3, 3), (1, 1)),
@@ -95,11 +94,11 @@ class LPRNet(nn.Module):
             SmallBlock(out_ch * 8, out_ch * 8),
             nn.MaxPool2d((3, 3), (2, 1)),
             nn.Dropout(0.5),
-            nn.Conv2d(out_ch * 8, out_ch * 8, (4, 1), 1),
+            nn.Conv2d(out_ch * 8, out_ch * 8, (4, 1), 1,bias=False),
             nn.BatchNorm2d(out_ch * 8),
             nn.ReLU(),
             nn.Dropout(0.5),
-            nn.Conv2d(out_ch * 8, class_num, (1, 13), 1, padding=(0, 6)),
+            nn.Conv2d(out_ch * 8, class_num, (1, 13), 1, padding=(0, 6),bias=False),
             nn.BatchNorm2d(class_num),
             nn.ReLU()
         )

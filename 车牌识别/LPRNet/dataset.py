@@ -9,6 +9,7 @@ import torch
 from PIL import Image
 from torch.utils.data import Dataset
 
+
 CHARS = ['京', '沪', '津', '渝', '冀', '晋', '蒙', '辽', '吉', '黑',
          '苏', '浙', '皖', '闽', '赣', '鲁', '豫', '鄂', '湘', '粤',
          '桂', '琼', '川', '贵', '云', '藏', '陕', '甘', '青', '宁',
@@ -18,6 +19,7 @@ CHARS = ['京', '沪', '津', '渝', '冀', '晋', '蒙', '辽', '吉', '黑',
          'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
          'W', 'X', 'Y', 'Z', 'I', 'O', '-'
          ]
+
 
 
 class PlateDataset(Dataset):
@@ -30,9 +32,9 @@ class PlateDataset(Dataset):
         file = open(file_path, "r")
         file_paths = file.readlines()
         for file_path in file_paths:
-            image_path = file_path.split("/")[-1][0:-1]
+            image_path = file_path[0:-1]
             self.image_paths.append(image_path)
-            label = image_path.split(".")[-1]
+            label = image_path.split("/")[-1].split(".")[0]
             self.labels.append(label)
 
     def __len__(self):
