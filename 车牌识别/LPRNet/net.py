@@ -40,10 +40,6 @@ class LocNet(nn.Module):
             nn.Tanh()
         )
 
-        self.loc_linear[3].weight.data.zero_()
-        self.loc_linear[3].bias.data.copy_(torch.tensor([1, 0, 0,
-                                                         0, 1, 0], dtype=torch.float))
-
     def stn(self, x):
         feature_conv_with_pool = self.with_pool(x)
         feature_conv_without_pool = self.without_pool(x)
@@ -80,7 +76,7 @@ class SmallBlock(nn.Module):
 
 # 论文中的结构，网上的复现都是千奇百怪的，最终在openvino的仓库中找了LPRNet的网络模型，结合进行复现
 class LPRNet(nn.Module):
-    def __init__(self, in_ch, out_ch, class_num):
+    def __init__(self, in_ch=3, out_ch=32, class_num=68):
         super().__init__()
         self.loc_net = LocNet(in_ch, out_ch)
         self.backbone = nn.Sequential(
@@ -117,12 +113,15 @@ class LPRNet(nn.Module):
         feature_concat = torch.cat([feature_backbone, feature_linear], dim=1)
         feature_conv = self.conv(feature_concat)
         # batch 字典 序列长度
-        feature_result = torch.squeeze(feature_conv, 2)
+        feature_result = torch.squeeze(feature_conv, 2).transpose(1,2)
         return feature_result
 
 
 if __name__ == '__main__':
     net = LPRNet(3, 32, 68)
+    x = torch.randn(2,3,24,94)
+    result = net(x)
+    print(result.shape)
     from torchsummary import summary
 
     summary(net, (3, 24, 94), device="cpu")

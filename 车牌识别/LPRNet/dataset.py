@@ -53,4 +53,5 @@ class PlateDataset(Dataset):
         label_data_[0:] = label_data
         label_data_ = torch.from_numpy(label_data_)
         label_length = torch.tensor(88, dtype=torch.int64)
-        return image_data, label_data_, label_length
+        target_length = torch.tensor(len(label_data),dtype=torch.int64)
+        return image_data, label_data_, label_length,target_length
