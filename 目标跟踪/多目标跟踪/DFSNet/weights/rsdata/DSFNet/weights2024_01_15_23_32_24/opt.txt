@@ -1,0 +1,31 @@
+==> torch version: 1.11.0+cu113
+==> cudnn version: 8200
+==> Cmd:
+['train.py', '--model_name', 'DSFNet', '--gpus', '0', '--lr', '1.25e-4', '--lr_step', '30,45', '--num_epochs', '55', '--batch_size', '4', '--val_intervals', '5', '--datasetname', 'rsdata']
+==> Opt:
+  K: 256
+  batch_size: 4
+  dataName: car
+  data_dir: C:/collation/Detection_coco_format/coco/car/
+  datasetname: rsdata
+  device: cuda
+  down_ratio: 1
+  gpus: [0]
+  gpus_str: 0
+  load_model: 
+  lr: 0.000125
+  lr_step: [30, 45]
+  model_name: DSFNet
+  nms: False
+  num_epochs: 55
+  num_workers: 4
+  resume: False
+  save_dir: ./weights/rsdata/DSFNet/weights2024_01_15_23_32_24
+  save_log_dir: ./weights/rsdata/DSFNet/weights2024_01_15_23_32_24
+  save_results_dir: ./weights/rsdata/DSFNet/results
+  save_track_results: False
+  seed: 317
+  seqLen: 5
+  show_results: False
+  test_large_size: False
+  val_intervals: 5
